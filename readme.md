@@ -2,6 +2,8 @@
 
 A local DNS server with IP changing and balancing, and unblocking.
 
+[简体中文](readme_zhcn.md)
+
 It CAN be worked on other cdns. try your own!
 
 ## What do you need?
@@ -35,4 +37,10 @@ A: You can go here: https://github.com/XIU2/CloudflareSpeedTest.
 
 *  https://github.com/XIU2/CloudflareSpeedTest
 
-*  https://github.com/zhengxiaowai/tcping , Modified code for ipv6 tcping.
+*  https://github.com/zhengxiaowai/tcping , Modified code for ipv6 tcping
+
+## Caution:
+
+This project is for educational use only. Do not use this item for any related activities that violate the laws of your region.
+
+If you do not comply with the above terms, any consequences will be borne by you. The author assumes no responsibility.
