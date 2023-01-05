@@ -12,7 +12,7 @@ import sys
 class Logger(object):
 
     def __init__(self, stream=sys.stdout):
-        output_dir = "./"
+        output_dir = "./logs"
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
         log_name = 'run_latest.log'
@@ -89,10 +89,10 @@ def choose_v6(ipv6, gen_ipv6, ipv4) -> bool:
 
 
 if __name__ == '__main__':
-    if os.path.exists('./run_latest.log'):
-        with open(f'./run{time.time()}.log.zst', 'wb') as zst:
-            zst.write(zstd.compress(open('./run_latest.log', 'rb').read()))
-        os.remove('./run_latest.log')
+    if os.path.exists('./logs/run_latest.log'):
+        with open(f'./logs/run{time.time()}.log.zst', 'wb') as zst:
+            zst.write(zstd.compress(open('./logs/run_latest.log', 'rb').read()))
+        os.remove('./logs/run_latest.log')
     sys.stdout = Logger(sys.stdout)
     sys.stderr = Logger(sys.stderr)
     n = m = False
