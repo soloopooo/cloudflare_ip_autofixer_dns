@@ -96,6 +96,7 @@ logger_in.addHandler(handler)
 logger_in.setLevel(logging.INFO)
 
 if __name__ == '__main__':
+    
     if os.path.exists('./logs/run_latest.log'):
         with open(f'./logs/run{time.time()}.log.zst', 'wb') as zst:
             zst.write(zstd.compress(open('./logs/run_latest.log', 'rb').read()))
@@ -118,29 +119,34 @@ if __name__ == '__main__':
     set_record(ipv4, ipv6)
     os.system('ipconfig /flushdns')
     server.start()
+    
     while server.is_running:
-        counter = 0
-        n, ipv4 = choose_v4(ipv4, gen_ip, ipv6)
-        while not n:
-            n, ipv4 = choose_v4(ipv4, gen_ip, ipv6)
-            os.system('ipconfig /flushdns')
-            counter += 1
-            ttl_now = TTL
-            if counter > pause_times_no_ip:
-                break
-
-        if enable_ipv6:
+        try:
             counter = 0
-            m, ipv6 = choose_v6(ipv6, gen_ipv6, ipv4)
-            while not m:
-                m, ipv6 = choose_v6(ipv6, gen_ipv6, ipv4)
+            n, ipv4 = choose_v4(ipv4, gen_ip, ipv6)
+            while not n:
+                n, ipv4 = choose_v4(ipv4, gen_ip, ipv6)
                 os.system('ipconfig /flushdns')
                 counter += 1
                 ttl_now = TTL
                 if counter > pause_times_no_ip:
                     break
-
-        logger_in.info(f'Ip is good now.')
-        logger_in.info(f'Current check interval: {ttl_now}s.')
-        time.sleep(ttl_now)
-        ttl_now += ttl_interval_add
+            if enable_ipv6:
+                counter = 0
+                m, ipv6 = choose_v6(ipv6, gen_ipv6, ipv4)
+                while not m:
+                    m, ipv6 = choose_v6(ipv6, gen_ipv6, ipv4)
+                    os.system('ipconfig /flushdns')
+                    counter += 1
+                    ttl_now = TTL
+                    if counter > pause_times_no_ip:
+                        break
+            logger_in.info(f'Ip is good now.')
+            logger_in.info(f'Current check interval: {ttl_now}s.')
+            time.sleep(ttl_now)
+            ttl_now += ttl_interval_add
+        except Exception:
+            logger_in.error("Please Check your network.")
+            logger_in.info("Retrying to connect...")
+        except KeyboardInterrupt:
+            break
