@@ -149,6 +149,7 @@ if __name__ == '__main__':
             logger_in.error("Please Check your network.")
             logger_in.info("Retrying to connect...")
         except KeyboardInterrupt:
+            logger_in.info("Stopping! ...")
             server.stop()
             break
             
