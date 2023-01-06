@@ -61,7 +61,7 @@ def change_ip6() -> str:
 def tcping(ip: str, ipv6: bool = False) -> bool:
     p = Ping(ip, port=443, timeout=2)
     p.ping(count=tcping_times, ipv6=ipv6)
-    return True if p._successed == tcping_success_times else False
+    return True if p._successed >= tcping_success_times else False
 
 
 def choose_v4(ipv4, gen_ip, ipv6) -> bool:

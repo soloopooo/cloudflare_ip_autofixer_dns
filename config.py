@@ -1,7 +1,7 @@
 from dnserver import DNSServer,Zone
 TTL = 20 # The sleep time (seconds) for each tcping test.
 tcping_times = 3 # Set the tcping times you want to.
-tcping_success_times = 3 # Must be NO MORE THAN tcping_times.
+tcping_success_times = 2 # Must be NO MORE THAN tcping_times.
 pause_times_no_ip = 10 # Set when ip is failing to connect,
                        # how many times will it pause to find a new ip.
 server = DNSServer(port=53,upstream='223.5.5.5')
