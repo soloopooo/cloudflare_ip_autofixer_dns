@@ -5,7 +5,7 @@ from tcping_modified import Ping
 import os
 import zstd
 import time
-from config import TTL, server, enable_ipv6, domain_list
+from config import TTL, server, enable_ipv6, domain_list,tcping_times,tcping_success_times
 import sys
 import logging
 
@@ -60,8 +60,8 @@ def change_ip6() -> str:
 
 def tcping(ip: str, ipv6: bool = False) -> bool:
     p = Ping(ip, port=443, timeout=2)
-    p.ping(count=3, ipv6=ipv6)
-    return True if p._successed == 3 else False
+    p.ping(count=tcping_times, ipv6=ipv6)
+    return True if p._successed == tcping_success_times else False
 
 
 def choose_v4(ipv4, gen_ip, ipv6) -> bool:
