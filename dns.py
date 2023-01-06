@@ -7,12 +7,12 @@ import zstd
 import time
 from config import TTL, server, enable_ipv6, domain_list
 import sys
-
+import logging
 
 class Logger(object):
 
     def __init__(self, stream=sys.stdout):
-        output_dir = "./logs"
+        output_dir = "./logs/"
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
         log_name = 'run_latest.log'
@@ -60,8 +60,8 @@ def change_ip6() -> str:
 
 def tcping(ip: str, ipv6: bool = False) -> bool:
     p = Ping(ip, port=443, timeout=2)
-    p.ping(count=1, ipv6=ipv6)
-    return True if p._successed == 1 else False
+    p.ping(count=3, ipv6=ipv6)
+    return True if p._successed == 3 else False
 
 
 def choose_v4(ipv4, gen_ip, ipv6) -> bool:
@@ -69,7 +69,7 @@ def choose_v4(ipv4, gen_ip, ipv6) -> bool:
     if not ping_n:
         ipv4 = next(gen_ip)
         ipv4 = ipv4.rstrip('\n')
-        print(f'Warn: Current ip is down. Choosing "{ipv4}".')
+        logger_in.warning(f'Warn: Current ip is down. Choosing "{ipv4}".')
         set_record(ipv4, ipv6)
         return False, ipv4
     else:
@@ -81,12 +81,19 @@ def choose_v6(ipv6, gen_ipv6, ipv4) -> bool:
     if not ping_6:
         ipv6: str = next(gen_ipv6)
         ipv6 = ipv6.rstrip('\n')
-        print(f'Warn: Current ipv6 is down. Choosing "{ipv6}".')
+        logger_in.warning(f'Warn: Current ipv6 is down. Choosing "{ipv6}".')
         set_record(ipv4, ipv6)
         return False, ipv6
     else:
         return True, ipv6
+    
+handler = logging.StreamHandler()
+handler.setLevel(logging.INFO)
+handler.setFormatter(logging.Formatter('%(asctime)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S'))
 
+logger_in = logging.getLogger(__name__)
+logger_in.addHandler(handler)
+logger_in.setLevel(logging.INFO)
 
 if __name__ == '__main__':
     if os.path.exists('./logs/run_latest.log'):
@@ -100,20 +107,22 @@ if __name__ == '__main__':
     gen_ipv6 = change_ip6()
     ipv4: str = next(gen_ip)
     ipv4 = ipv4.rstrip('\n')
-    print(f'Choosing "{ipv4}".')
+    logger_in.info(f'Choosing "{ipv4}".')
     if enable_ipv6:
         ipv6: str = next(gen_ipv6)
         ipv6 = ipv6.rstrip('\n')
-        print(f'Choosing "{ipv6}".')
+        logger_in.info(f'Choosing "{ipv6}".')
     else:
         ipv6 = None
     set_record(ipv4, ipv6)
+    os.system('ipconfig /flushdns')
     server.start()
     while server.is_running:
         counter = 0
         n, ipv4 = choose_v4(ipv4, gen_ip, ipv6)
         while not n:
             n, ipv4 = choose_v4(ipv4, gen_ip, ipv6)
+            os.system('ipconfig /flushdns')
             counter += 1
             if counter > 10:
                 break
@@ -123,9 +132,11 @@ if __name__ == '__main__':
             m, ipv6 = choose_v6(ipv6, gen_ipv6, ipv4)
             while not m:
                 m, ipv6 = choose_v6(ipv6, gen_ipv6, ipv4)
+                os.system('ipconfig /flushdns')
                 counter += 1
                 if counter > 10:
                     break
 
-        print(f'Ip is good now.')
+        logger_in.info(f'Ip is good now.')
+        
         time.sleep(TTL)
