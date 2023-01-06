@@ -5,7 +5,7 @@ from tcping_modified import Ping
 import os
 import zstd
 import time
-from config import TTL, server, enable_ipv6, domain_list,tcping_times,tcping_success_times
+from config import TTL, server, enable_ipv6, domain_list,tcping_times,tcping_success_times,pause_times_no_ip
 import sys
 import logging
 
@@ -124,7 +124,7 @@ if __name__ == '__main__':
             n, ipv4 = choose_v4(ipv4, gen_ip, ipv6)
             os.system('ipconfig /flushdns')
             counter += 1
-            if counter > 10:
+            if counter > pause_times_no_ip:
                 break
 
         if enable_ipv6:
@@ -134,7 +134,7 @@ if __name__ == '__main__':
                 m, ipv6 = choose_v6(ipv6, gen_ipv6, ipv4)
                 os.system('ipconfig /flushdns')
                 counter += 1
-                if counter > 10:
+                if counter > pause_times_no_ip:
                     break
 
         logger_in.info(f'Ip is good now.')
