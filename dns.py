@@ -130,6 +130,7 @@ if __name__ == '__main__':
                 counter += 1
                 ttl_now = TTL
                 if counter > pause_times_no_ip:
+                    logger_in.warning(f'Can\'t find ipv4, exiting.')
                     break
             if enable_ipv6:
                 counter = 0
@@ -140,8 +141,9 @@ if __name__ == '__main__':
                     counter += 1
                     ttl_now = TTL
                     if counter > pause_times_no_ip:
+                        logger_in.warning(f'Can\'t find ipv6, exiting.')
                         break
-            logger_in.info(f'Ip is good now.')
+            logger_in.info(f'Ip checking is ok now.')
             logger_in.info(f'Current check interval: {ttl_now}s.')
             time.sleep(ttl_now)
             ttl_now += ttl_interval_add
