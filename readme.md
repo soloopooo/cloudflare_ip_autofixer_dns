@@ -12,7 +12,9 @@ You need python 3.11.0.
 
 run `pip install -r requirements.txt`.
 
-Open `config.py`. You can config your dns list.
+Open `config.py`. You can config your dns list, upstream DNS server(8.8.8.8 or 223.5.5.5).
+
+Make sure you have input some ip addresses in `./file/ip_pool.txt`.
 
 IP pool can be changed in directories `./file/`.
 

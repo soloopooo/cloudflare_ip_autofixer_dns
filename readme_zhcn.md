@@ -10,7 +10,9 @@
 
 终端中运行 `pip install -r requirements.txt`。
 
-打开 `config.py`。你可以在此进行编辑。
+打开 `config.py`。你可以在此进行编辑诸如自定义DNS域名列表，上游DNS服务器(223.5.5.5或8.8.8.8)等。
+
+确保`./file/ip_pool.txt`中有一些ip地址。
 
 IP 地址池在文件夹 `./file/` 中。
 
