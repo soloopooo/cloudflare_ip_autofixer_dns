@@ -128,10 +128,12 @@ def choose_v4(ipv4, gen_ip, ipv6) -> bool:
             ipv4 = random.choice(passed_ip)
             if ipv4:
                 logger_in.info(f'Use {ipv4}.')
+                set_record(ipv4, ipv6)
                 return True, ipv4
         except:
             ipv4 = ipv4_prev
             logger_in.warning(f'No ip is suitable. Keeping {ipv4}.')
+            set_record(ipv4, ipv6)
             return False, ipv4_prev
     else:
         return True, ipv4
@@ -168,10 +170,12 @@ def choose_v6(ipv6, gen_ipv6, ipv4) -> bool:
             ipv6 = random.choice(passed_ip)
             if ipv6:
                 logger_in.info(f'Use {ipv6}.')
-                return True, ipv4
+                set_record(ipv4, ipv6)
+                return True, ipv6
         except:
             ipv6 = ipv6_prev
             logger_in.warning(f'No ip is suitable. Keeping {ipv6}.')
+            set_record(ipv4, ipv6)
             return False, ipv6_prev
     else:
         return True, ipv6
