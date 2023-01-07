@@ -3,3 +3,5 @@ log/**
 *.log
 *.log.zst
 run.bat
+file/ip_pool6.txt
+file/ip_pool.txt
